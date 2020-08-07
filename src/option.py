@@ -19,7 +19,8 @@ parser.add_argument('--seed', type=int, default=1,
                     help='random seed')
 
 # Data specifications
-parser.add_argument('--dir_data', type=str, default='../../../dataset',
+#parser.add_argument('--dir_data', type=str, default='../../../dataset',
+parser.add_argument('--dir_data', type=str, default='/mnt/data/download/DIV2K/',
                     help='dataset directory')
 parser.add_argument('--dir_demo', type=str, default='../test',
                     help='demo image directory')
@@ -45,7 +46,8 @@ parser.add_argument('--no_augment', action='store_true',
                     help='do not use data augmentation')
 
 # Model specifications
-parser.add_argument('--model', default='EDSR',
+#parser.add_argument('--model', default='EDSR',
+parser.add_argument('--model', default='RCAN',
                     help='model name')
 
 parser.add_argument('--act', type=str, default='relu',

@@ -7,7 +7,7 @@
 **About PyTorch 1.1.0**
   * There have been minor changes with the 1.1.0 update. Now we support PyTorch 1.1.0 by default, and please use the legacy branch if you prefer older version.
 
-![](/figs/main.png)
+![](figs/main.png)
 
 This repository is an official PyTorch implementation of the paper **"Enhanced Deep Residual Networks for Single Image Super-Resolution"** from **CVPRW 2017, 2nd NTIRE**.
 You can find the original code and more information from [here](https://github.com/LimBee/NTIRE2017).
