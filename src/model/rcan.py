@@ -100,7 +100,10 @@ class RCAN(nn.Module):
         scale = args.scale[0]
         act = nn.ReLU(True)
         #self.exit_locations = [3, 5, 7]
-        self.exit_locations = tuple(map(int, args.exit_locations.split(',')))
+        if args.exit_locations == '':
+            self.exit_locations = []
+        else:
+            self.exit_locations = tuple(map(int, args.exit_locations.split(',')))
         
         # RGB mean for DIV2K
         self.sub_mean = common.MeanShift(args.rgb_range)
