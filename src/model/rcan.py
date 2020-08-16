@@ -74,6 +74,7 @@ class ClassifierModule(nn.Module):
             common.Upsampler(conv, args.scale[0], args.n_feats, act=False),
             conv(args.n_feats, args.n_colors, kernel_size)]
 
+        self.add_mean = common.MeanShift(args.rgb_range, sign=1)
         self.tail = nn.Sequential(*modules_tail)
 
 
@@ -125,7 +126,7 @@ class RCAN(nn.Module):
         #    common.Upsampler(conv, scale, n_feats, act=False),
         #    conv(n_feats, args.n_colors, kernel_size)]
 
-        self.add_mean = common.MeanShift(args.rgb_range, sign=1)
+        #self.add_mean = common.MeanShift(args.rgb_range, sign=1)
 
         self.head = nn.Sequential(*modules_head)
         self.body = nn.Sequential(*modules_body)
