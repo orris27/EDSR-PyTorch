@@ -67,6 +67,7 @@ class Trainer():
                     self.loss.display_loss(batch),
                     timer_model.release(),
                     timer_data.release()))
+                break
 
             timer_data.tic()
 
