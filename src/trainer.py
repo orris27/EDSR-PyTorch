@@ -69,6 +69,7 @@ class Trainer():
                     timer_data.release()))
 
             timer_data.tic()
+            break
 
         self.loss.end_log(len(self.loader_train))
         self.error_last = self.loss.log[-1, -1]
@@ -110,18 +111,25 @@ class Trainer():
                 self.ckp.log[-1, :, idx_data, idx_scale] /= len(d)
                 #best = self.ckp.log.max(0)
                 best = self.ckp.log[:, -1, :, :].max(0)
-                self.ckp.write_log(
-                        '[{} x{}]\tPSNR: {:.3f} {:.3f}  (Best: {:.3f} @epoch {})'.format(
-                        d.dataset.name,
-                        scale,
-                        self.ckp.log[-1, 0, idx_data, idx_scale],
-                        self.ckp.log[-1, 1, idx_data, idx_scale],
-                        #self.ckp.log[-1, 2, idx_data, idx_scale],
-                        #self.ckp.log[-1, 3, idx_data, idx_scale],
-                        best[0][idx_data, idx_scale],
-                        best[1][idx_data, idx_scale] + 1
-                    )
-                )
+
+                print_log = '[{} x{}]\tPSNR: '.format(d.dataset.name, scale)
+                for i_ in range(len(self.model.model.classifiers)):
+                    print_log += '{:.3f} '.format(self.ckp.log[-1, i_, idx_data, idx_scale])
+                print_log += '(Best: {:.3f} @epoch {})'.format(best[0][idx_data, idx_scale], best[1][idx_data, idx_scale] + 1)
+                self.ckp.write_log(print_log)
+
+#                self.ckp.write_log(
+#                        '[{} x{}]\tPSNR: {:.3f} {:.3f}  (Best: {:.3f} @epoch {})'.format(
+#                        d.dataset.name,
+#                        scale,
+#                        self.ckp.log[-1, 0, idx_data, idx_scale],
+#                        self.ckp.log[-1, 1, idx_data, idx_scale],
+#                        #self.ckp.log[-1, 2, idx_data, idx_scale],
+#                        #self.ckp.log[-1, 3, idx_data, idx_scale],
+#                        best[0][idx_data, idx_scale],
+#                        best[1][idx_data, idx_scale] + 1
+#                    )
+#                )
 
         self.ckp.write_log('Forward: {:.2f}s\n'.format(timer_test.toc()))
         self.ckp.write_log('Saving...')
