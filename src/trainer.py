@@ -45,8 +45,11 @@ class Trainer():
             timer_model.tic()
 
             self.optimizer.zero_grad()
-            sr = self.model(lr, 0)
-            loss = self.loss(sr, hr)
+            #sr = self.model(lr, 0)
+            sr_list = self.model(lr, 0)
+            loss = 0.0
+            for sr in sr_list:
+                loss += self.loss(sr, hr)
             loss.backward()
             if self.args.gclip > 0:
                 utils.clip_grad_value_(
@@ -77,7 +80,7 @@ class Trainer():
         epoch = self.optimizer.get_last_epoch()
         self.ckp.write_log('\nEvaluation:')
         self.ckp.add_log(
-            torch.zeros(1, len(self.loader_test), len(self.scale))
+            torch.zeros(1, len(self.model.classifiers), len(self.loader_test), len(self.scale))
         )
         self.model.eval()
 
@@ -88,18 +91,20 @@ class Trainer():
                 d.dataset.set_scale(idx_scale)
                 for lr, hr, filename in tqdm(d, ncols=80):
                     lr, hr = self.prepare(lr, hr)
-                    sr = self.model(lr, idx_scale)
-                    sr = utility.quantize(sr, self.args.rgb_range)
+                    # sr = self.model(lr, idx_scale)
+                    sr_list = self.model(lr, idx_scale)
+                    for exit, sr in enumerate(sr_list):
+                        sr = utility.quantize(sr, self.args.rgb_range)
 
-                    save_list = [sr]
-                    self.ckp.log[-1, idx_data, idx_scale] += utility.calc_psnr(
-                        sr, hr, scale, self.args.rgb_range, dataset=d
-                    )
-                    if self.args.save_gt:
-                        save_list.extend([lr, hr])
+                        save_list = [sr]
+                        self.ckp.log[-1, exit, idx_data, idx_scale] += utility.calc_psnr(
+                            sr, hr, scale, self.args.rgb_range, dataset=d
+                        )
+                        if self.args.save_gt:
+                            save_list.extend([lr, hr])
 
-                    if self.args.save_results:
-                        self.ckp.save_results(d, filename[0], save_list, scale)
+                        if self.args.save_results:
+                            self.ckp.save_results(d, filename[0], save_list, scale, exit)
 
                 self.ckp.log[-1, idx_data, idx_scale] /= len(d)
                 best = self.ckp.log.max(0)

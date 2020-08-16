@@ -65,6 +65,27 @@ class ResidualGroup(nn.Module):
         res += x
         return res
 
+
+class ClassifierModule(nn.Module):
+    def __init__(self, in_channel, hidden_channel, down_scale, num_btn, expansion, num_classes):
+        super(ClassifierModule, self).__init__()
+        modules_tail = [
+            #common.Upsampler(conv, scale, n_feats, act=False),
+            common.Upsampler(conv, args.scale[0], args.n_feats, act=False),
+            conv(args.n_feats, args.n_colors, kernel_size)]
+
+        self.tail = nn.Sequential(*modules_tail)
+
+
+    def forward(self, res, x):
+        res += x
+
+        res = self.tail(res)
+        res = self.add_mean(res)
+
+        return res
+
+
 ## Residual Channel Attention Network (RCAN)
 class RCAN(nn.Module):
     def __init__(self, args, conv=common.default_conv):
@@ -77,6 +98,7 @@ class RCAN(nn.Module):
         reduction = args.reduction 
         scale = args.scale[0]
         act = nn.ReLU(True)
+        self.exit_locations = [3, 5, 7]
         
         # RGB mean for DIV2K
         self.sub_mean = common.MeanShift(args.rgb_range)
@@ -91,11 +113,13 @@ class RCAN(nn.Module):
             for _ in range(n_resgroups)]
 
         modules_body.append(conv(n_feats, n_feats, kernel_size))
+        self.classifiers = nn.ModuleList()
+        self.classifiers.append(self._build_classifier(conv, kernel_size, args))
 
         # define tail module
-        modules_tail = [
-            common.Upsampler(conv, scale, n_feats, act=False),
-            conv(n_feats, args.n_colors, kernel_size)]
+        #modules_tail = [
+        #    common.Upsampler(conv, scale, n_feats, act=False),
+        #    conv(n_feats, args.n_colors, kernel_size)]
 
         self.add_mean = common.MeanShift(args.rgb_range, sign=1)
 
@@ -103,17 +127,44 @@ class RCAN(nn.Module):
         self.body = nn.Sequential(*modules_body)
         self.tail = nn.Sequential(*modules_tail)
 
+#    def forward(self, x):
+#        x = self.sub_mean(x)
+#        x = self.head(x)
+#
+#        res = self.body(x)
+#        res += x
+#
+#        x = self.tail(res)
+#        x = self.add_mean(x)
+#
+#        return x 
+
+
+
     def forward(self, x):
+        results = []
+
         x = self.sub_mean(x)
         x = self.head(x)
 
-        res = self.body(x)
-        res += x
+        res = x
+        for idx, m in enumerate(self.body): # default n_resgroups = 10
+            res = m(res)
+            if idx in self.exit_locations:
+                results.append(self.classifiers[self.exit_locations.index(idx)](res, x))
 
-        x = self.tail(res)
-        x = self.add_mean(x)
+        #res = self.body(x)
 
-        return x 
+        #res += x
+        #x = self.tail(res)
+        #x = self.add_mean(x)
+        results.append(self.classifiers[-1](res, x))
+
+        #return x 
+        return results
+
+
+
 
     def load_state_dict(self, state_dict, strict=False):
         own_state = self.state_dict()

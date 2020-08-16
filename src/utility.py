@@ -110,6 +110,12 @@ class checkpoint():
             label = 'SR on {}'.format(d)
             fig = plt.figure()
             plt.title(label)
+#            for idx_scale, scale in enumerate(self.args.scale):
+#                plt.plot(
+#                    axis,
+#                    self.log[:, idx_data, idx_scale].numpy(),
+#                    label='Scale {}'.format(scale)
+#                )
             for idx_scale, scale in enumerate(self.args.scale):
                 plt.plot(
                     axis,
@@ -145,11 +151,15 @@ class checkpoint():
         while not self.queue.empty(): time.sleep(1)
         for p in self.process: p.join()
 
-    def save_results(self, dataset, filename, save_list, scale):
+    def save_results(self, dataset, filename, save_list, scale, exit):
         if self.args.save_results:
+#            filename = self.get_path(
+#                'results-{}'.format(dataset.dataset.name),
+#                '{}_x{}_'.format(filename, scale)
+#            )
             filename = self.get_path(
                 'results-{}'.format(dataset.dataset.name),
-                '{}_x{}_'.format(filename, scale)
+                '{}_x{}_exit{}'.format(filename, scale, exit)
             )
 
             postfix = ('SR', 'LR', 'HR')

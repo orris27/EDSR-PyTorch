@@ -24,6 +24,7 @@ class Model(nn.Module):
 
         module = import_module('model.' + args.model.lower())
         self.model = module.make_model(args).to(self.device)
+        assert len(self.model.classifiers) == args.num_exit
         if args.precision == 'half':
             self.model.half()
 
