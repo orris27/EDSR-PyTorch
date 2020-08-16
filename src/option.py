@@ -20,7 +20,7 @@ parser.add_argument('--seed', type=int, default=1,
 
 # Data specifications
 #parser.add_argument('--dir_data', type=str, default='../../../dataset',
-parser.add_argument('--dir_data', type=str, default='/mnt/data/download/',
+parser.add_argument('--dir_data', type=str, default='/mnt/data/download/div2k_edsr',
                     help='dataset directory')
 parser.add_argument('--dir_demo', type=str, default='../test',
                     help='demo image directory')
@@ -83,7 +83,7 @@ parser.add_argument('--n_resgroups', type=int, default=10,
                     help='number of residual groups')
 parser.add_argument('--reduction', type=int, default=16,
                     help='number of feature maps reduction')
-parser.add_argument('--exit_locations', type=str, default='5',
+parser.add_argument('--exit_locations', type=str, default='3, 6',
                     help='location of branch classifiers, excluding the last classifier')
 
 # Training specifications

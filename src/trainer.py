@@ -90,7 +90,8 @@ class Trainer():
         for idx_data, d in enumerate(self.loader_test):
             for idx_scale, scale in enumerate(self.scale):
                 d.dataset.set_scale(idx_scale)
-                for lr, hr, filename in tqdm(d, ncols=80):
+                #for lr, hr, filename in tqdm(d, ncols=80):
+                for lr, hr, filename in d:
                     lr, hr = self.prepare(lr, hr)
                     # sr = self.model(lr, idx_scale)
                     sr_list = self.model(lr, idx_scale)

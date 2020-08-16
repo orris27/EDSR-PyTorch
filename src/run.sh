@@ -7,7 +7,7 @@
 
 
 #python main.py --model RCAN --scale 2 --patch_size 96 --save rcan_baseline_x2 --reset
-python main.py --model RCAN --scale 2 --patch_size 96 --save rcan_baseline_x2 --reset --exit_locations ''
+python main.py --model RCAN --scale 2 --patch_size 96 --save rcan_baseline_x2 --reset 
 
 
 
