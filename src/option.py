@@ -83,8 +83,8 @@ parser.add_argument('--n_resgroups', type=int, default=10,
                     help='number of residual groups')
 parser.add_argument('--reduction', type=int, default=16,
                     help='number of feature maps reduction')
-parser.add_argument('--num_exit', type=int, default=4,
-                    help='number of exits')
+parser.add_argument('--exit_locations', type=str, default='5',
+                    help='location of branch classifiers, excluding the last classifier')
 
 # Training specifications
 parser.add_argument('--reset', action='store_true',
@@ -153,6 +153,8 @@ template.set_template(args)
 args.scale = list(map(lambda x: int(x), args.scale.split('+')))
 args.data_train = args.data_train.split('+')
 args.data_test = args.data_test.split('+')
+
+assert int(args.exit_locations.split(',')[-1]) < args.n_resgroups - 1
 
 if args.epochs == 0:
     args.epochs = 1e8

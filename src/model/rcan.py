@@ -99,7 +99,8 @@ class RCAN(nn.Module):
         reduction = args.reduction 
         scale = args.scale[0]
         act = nn.ReLU(True)
-        self.exit_locations = [3, 5, 7]
+        #self.exit_locations = [3, 5, 7]
+        self.exit_locations = tuple(map(int, args.exit_locations.split(',')))
         
         # RGB mean for DIV2K
         self.sub_mean = common.MeanShift(args.rgb_range)
@@ -116,7 +117,8 @@ class RCAN(nn.Module):
         modules_body.append(conv(n_feats, n_feats, kernel_size))
         self.classifiers = nn.ModuleList()
         #self.classifiers.append(self._build_classifier(conv, kernel_size, args))
-        for i in range(args.num_exit):
+        #for i in range(args.num_exit):
+        for i in range(len(self.exit_locations) + 1):
             self.classifiers.append(ClassifierModule(conv, kernel_size, args))
         #self.classifiers.append(ClassifierModule(conv, kernel_size, args))
         #self.classifiers.append(ClassifierModule(conv, kernel_size, args))
