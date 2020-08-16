@@ -83,6 +83,8 @@ parser.add_argument('--n_resgroups', type=int, default=10,
                     help='number of residual groups')
 parser.add_argument('--reduction', type=int, default=16,
                     help='number of feature maps reduction')
+parser.add_argument('--num_exit', type=int, default=4,
+                    help='number of exits')
 
 # Training specifications
 parser.add_argument('--reset', action='store_true',
