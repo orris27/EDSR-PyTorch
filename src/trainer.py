@@ -111,13 +111,13 @@ class Trainer():
                 #best = self.ckp.log.max(0)
                 best = self.ckp.log[:, -1, :, :].max(0)
                 self.ckp.write_log(
-                        '[{} x{}]\tPSNR: {:.3f} {:.3f} {:.3f} {:.3f} (Best: {:.3f} @epoch {})'.format(
+                        '[{} x{}]\tPSNR: {:.3f} {:.3f}  (Best: {:.3f} @epoch {})'.format(
                         d.dataset.name,
                         scale,
                         self.ckp.log[-1, 0, idx_data, idx_scale],
                         self.ckp.log[-1, 1, idx_data, idx_scale],
-                        self.ckp.log[-1, 2, idx_data, idx_scale],
-                        self.ckp.log[-1, 3, idx_data, idx_scale],
+                        #self.ckp.log[-1, 2, idx_data, idx_scale],
+                        #self.ckp.log[-1, 3, idx_data, idx_scale],
                         best[0][idx_data, idx_scale],
                         best[1][idx_data, idx_scale] + 1
                     )
