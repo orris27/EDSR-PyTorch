@@ -81,7 +81,7 @@ class Trainer():
         epoch = self.optimizer.get_last_epoch()
         self.ckp.write_log('\nEvaluation:')
         self.ckp.add_log(
-            torch.zeros(1, len(self.model.classifiers), len(self.loader_test), len(self.scale))
+            torch.zeros(1, len(self.model.model.classifiers), len(self.loader_test), len(self.scale))
         )
         self.model.eval()
 
