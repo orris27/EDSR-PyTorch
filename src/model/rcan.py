@@ -67,7 +67,7 @@ class ResidualGroup(nn.Module):
 
 
 class ClassifierModule(nn.Module):
-    def __init__(self, in_channel, hidden_channel, down_scale, num_btn, expansion, num_classes):
+    def __init__(self, conv, kernel_size, args):
         super(ClassifierModule, self).__init__()
         modules_tail = [
             #common.Upsampler(conv, scale, n_feats, act=False),
@@ -114,7 +114,8 @@ class RCAN(nn.Module):
 
         modules_body.append(conv(n_feats, n_feats, kernel_size))
         self.classifiers = nn.ModuleList()
-        self.classifiers.append(self._build_classifier(conv, kernel_size, args))
+        #self.classifiers.append(self._build_classifier(conv, kernel_size, args))
+        self.classifiers.append(ClassifierModule(conv, kernel_size, args))
 
         # define tail module
         #modules_tail = [
