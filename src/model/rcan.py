@@ -116,6 +116,9 @@ class RCAN(nn.Module):
         self.classifiers = nn.ModuleList()
         #self.classifiers.append(self._build_classifier(conv, kernel_size, args))
         self.classifiers.append(ClassifierModule(conv, kernel_size, args))
+        self.classifiers.append(ClassifierModule(conv, kernel_size, args))
+        self.classifiers.append(ClassifierModule(conv, kernel_size, args))
+        self.classifiers.append(ClassifierModule(conv, kernel_size, args))
 
         # define tail module
         #modules_tail = [
