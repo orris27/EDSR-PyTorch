@@ -7,10 +7,11 @@
 
 
 #python main.py --model RCAN --scale 2 --patch_size 96 --save rcan_baseline_x2 --reset
-python main.py --model RCAN --scale 2 --patch_size 96 --save rcan_baseline_x2 --reset 
+# training
+python main.py --model RCAN --scale 2 --patch_size 96 --save rcan_baseline_x2 --reset  --data_test Set5+Set14+B100+Urban100+DIV2K
 
-
-
+# evaluation
+python main.py --model RCAN --scale 2 --patch_size 96 --save rcan_baseline_x2 --test_only --data_test Set5+Set14+B100+Urban100+DIV2K 
 
 
 
