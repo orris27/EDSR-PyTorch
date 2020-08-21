@@ -8,10 +8,11 @@
 
 #python main.py --model RCAN --scale 2 --patch_size 96 --save rcan_baseline_x2 --reset
 # training
-python main.py --model RCAN --scale 2 --patch_size 96 --save rcan_baseline_x2 --reset  --data_test Set5+Set14+B100+Urban100+DIV2K
+python main.py --model RCAN --scale 2 --patch_size 96 --save rcan --reset  --data_test Set5+Set14+B100+Urban100+DIV2K > results/rcan.log
+python main.py --model RCAN --scale 2 --patch_size 96 --save rcan_conv --reset  --data_test Set5+Set14+B100+Urban100+DIV2K > results/rcan_conv.log
 
 # evaluation
-python main.py --model RCAN --scale 2 --patch_size 96 --save rcan_baseline_x2 --test_only --data_test Set5+Set14+B100+Urban100+DIV2K 
+python main.py --model RCAN --scale 2 --patch_size 96 --load rcan_baseline_x2 --test_only --data_test Set5+Set14+B100+Urban100+DIV2K  --dir_data /mnt/data/download/div2k_edsr
 
 
 

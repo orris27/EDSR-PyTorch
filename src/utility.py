@@ -116,12 +116,13 @@ class checkpoint():
 #                    self.log[:, idx_data, idx_scale].numpy(),
 #                    label='Scale {}'.format(scale)
 #                )
-            for idx_scale, scale in enumerate(self.args.scale):
-                plt.plot(
-                    axis,
-                    self.log[:, idx_data, idx_scale].numpy(),
-                    label='Scale {}'.format(scale)
-                )
+            for exit in range(self.log.shape[1]):
+                for idx_scale, scale in enumerate(self.args.scale):
+                    plt.plot(
+                        axis,
+                        self.log[:, exit, idx_data, idx_scale].numpy(),
+                        label='Exit-{}, Scale {}'.format(exit, scale)
+                    )
             plt.legend()
             plt.xlabel('Epochs')
             plt.ylabel('PSNR')
